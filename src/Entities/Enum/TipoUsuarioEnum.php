@@ -4,6 +4,6 @@ namespace App\Entities\Enum;
 
 abstract class TipoUsuarioEnum
 {
-  const Comum = 0;
-  const Logista = 1;
+  public const Comum = 0;
+  public const Logista = 1;
 }
