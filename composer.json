@@ -1,0 +1,19 @@
+{
+  "name": "projeto/desafio-back",
+  "description": "",
+  "minimum-stability": "stable",
+  "license": "proprietary",
+  "authors": [
+    {
+      "name": "Edson Júnior",
+      "email": "edsonlsjj@gmail.com"
+    }
+  ],
+  "require": {
+    "slim/slim": "4.*",
+    "slim/psr7": "^1.5"
+  },
+  "require-dev": {
+    "roave/security-advisories": "dev-latest"
+  }
+}
