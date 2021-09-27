@@ -21,8 +21,8 @@ class TransacaoController
   #[Pure]
   public function __construct()
   {
-    $this->service = new TransacaoService(new TransacaoRepository());
     $this->usuarioService = new UsuarioService(new UsuarioRepository());
+    $this->service = new TransacaoService(new TransacaoRepository(), $this->usuarioService);
   }
 
   /**

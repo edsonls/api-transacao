@@ -6,13 +6,15 @@ use App\Entities\Transacao;
 use App\Entities\Usuario;
 use App\Repositories\Interfaces\ITransacaoRepository;
 use App\Services\Interfaces\ITransacaoService;
+use App\Services\Interfaces\IUsuarioService;
 
 class TransacaoService implements ITransacaoService
 {
 
 
   public function __construct(
-    private ITransacaoRepository $repository
+    private ITransacaoRepository $repository,
+    private IUsuarioService $usuarioService
   ) {
   }
 
@@ -23,6 +25,14 @@ class TransacaoService implements ITransacaoService
       $recebedor,
       $valor
     );
-    return $this->repository->add($transacaoObj);
+    $idTransacao = $this->repository->add($transacaoObj);
+    if ($idTransacao) {
+      if ($this->usuarioService->retiraSaldo($pagador, $valor)) {
+        if ($this->usuarioService->adicionaSaldo($recebedor, $valor)) {
+          return $idTransacao;
+        }
+      }
+    }
   }
+
 }

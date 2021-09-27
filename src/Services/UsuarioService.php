@@ -22,6 +22,7 @@ class UsuarioService implements IUsuarioService
       $usuario['documento'],
       $usuario['email'],
       $usuario['senha'],
+      $usuario['tipoUsuario'],
       $usuario['saldo'],
     );
     return $this->repository->add($usuarioObj);
@@ -30,5 +31,17 @@ class UsuarioService implements IUsuarioService
   public function find(int $id): Usuario
   {
     return $this->repository->find($id);
+  }
+
+  public function retiraSaldo(Usuario $pagador, float $valor): bool
+  {
+    $pagador->atualizaSaldo($pagador->getSaldo() - $valor);
+    return $this->repository->update($pagador);
+  }
+
+  public function adicionaSaldo(Usuario $recebedor, float $valor): bool
+  {
+    $recebedor->atualizaSaldo($recebedor->getSaldo() + $valor);
+    return $this->repository->update($recebedor);
   }
 }

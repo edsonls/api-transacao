@@ -56,6 +56,22 @@ class UsuarioRepository extends SleekDB implements IUsuarioRepository
       senha:       '',
       tipoUsuario: $arrayUsuario['tipoUsuario'],
       saldo:       $arrayUsuario['saldo'],
+      id:          $arrayUsuario['_id'],
     );
+  }
+
+  public function update(Usuario $usuario): bool
+  {
+    return $this->getConnection()->updateById(
+        $usuario->getId(),
+        [
+          'nome' => $usuario->getNome(),
+          'documento' => $usuario->getDocumento(),
+          'email' => $usuario->getEmail(),
+          'senha' => $usuario->getSenha(),
+          'saldo' => $usuario->getSaldo(),
+          'tipoUsuario' => $usuario->getTipoUsuario(),
+        ]
+      ) !== false;
   }
 }

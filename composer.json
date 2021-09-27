@@ -12,10 +12,12 @@
   "require": {
     "slim/slim": "4.*",
     "slim/psr7": "^1.5",
-    "rakibtg/sleekdb": "^2.12"
+    "rakibtg/sleekdb": "^2.12",
+    "fakerphp/faker": "^1.16"
   },
   "require-dev": {
-    "roave/security-advisories": "dev-latest"
+    "roave/security-advisories": "dev-latest",
+    "pestphp/pest": "^1.20"
   },
   "autoload": {
     "psr-4": {

@@ -17,6 +17,7 @@ class Usuario
      */
     private int $tipoUsuario = TipoUsuarioEnum::Comum,
     private float $saldo = 0,
+    private ?int $id = null,
   ) {
   }
 
@@ -66,6 +67,19 @@ class Usuario
   public function getSaldo(): float
   {
     return $this->saldo;
+  }
+
+  /**
+   * @return int
+   */
+  public function getId(): int
+  {
+    return $this->id;
+  }
+
+  public function atualizaSaldo(float $novosaldo)
+  {
+    $this->saldo = $novosaldo;
   }
 
 
