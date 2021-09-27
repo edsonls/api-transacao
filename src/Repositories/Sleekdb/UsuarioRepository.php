@@ -35,8 +35,27 @@ class UsuarioRepository extends SleekDB implements IUsuarioRepository
         'email' => $usuario->getEmail(),
         'senha' => $usuario->getSenha(),
         'saldo' => $usuario->getSaldo(),
+        'tipoUsuario' => $usuario->getTipoUsuario(),
       ]
     )
     ['_id'];
+  }
+
+  /**
+   * @throws IOException
+   * @throws InvalidConfigurationException
+   * @throws InvalidArgumentException
+   */
+  public function find(int $id): Usuario
+  {
+    $arrayUsuario = $this->getConnection()->findById($id);
+    return new Usuario(
+                   $arrayUsuario['nome'],
+                   $arrayUsuario['documento'],
+                   $arrayUsuario['email'],
+      senha:       '',
+      tipoUsuario: $arrayUsuario['tipoUsuario'],
+      saldo:       $arrayUsuario['saldo'],
+    );
   }
 }

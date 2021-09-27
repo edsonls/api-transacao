@@ -26,4 +26,9 @@ class UsuarioService implements IUsuarioService
     );
     return $this->repository->add($usuarioObj);
   }
+
+  public function find(int $id): Usuario
+  {
+    return $this->repository->find($id);
+  }
 }
