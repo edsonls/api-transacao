@@ -36,23 +36,45 @@ beforeEach(
   }
 );
 it(
-  'Transacao Usuario -> Usuario',
+  'OK - Transacao Usuario -> Usuario',
+  function () {
+    $pagador = $this->usuarioService->find($this->pagadorId);
+    $recebedor = $this->usuarioService->find($this->recebedorId);
+    $valor = 50.85;
+    expect($this->transacaoService->add($pagador, $recebedor, $valor))
+      ->toBeGreaterThanOrEqual(1);
+  }
+);
+it(
+  'OK - Transacao Usuario -> Usuario Validando Saldo Pagador',
   function () {
     $pagador = $this->usuarioService->find($this->pagadorId);
     $saldoAnteriorPagador = $pagador->getSaldo();
     $recebedor = $this->usuarioService->find($this->recebedorId);
-    $saldoAnteriorRecebedor = $pagador->getSaldo();
     $valor = 50.85;
     expect($this->transacaoService->add($pagador, $recebedor, $valor))
       ->toBeGreaterThanOrEqual(1);
     expect($this->usuarioService->find($this->pagadorId)->getSaldo())
       ->toEqual($saldoAnteriorPagador - $valor);
+  }
+);
+
+it(
+  'OK - Transacao Usuario -> Usuario Validando Saldo Recebedor',
+  function () {
+    $pagador = $this->usuarioService->find($this->pagadorId);
+    $recebedor = $this->usuarioService->find($this->recebedorId);
+    $saldoAnteriorRecebedor = $pagador->getSaldo();
+    $valor = 50.85;
+    expect($this->transacaoService->add($pagador, $recebedor, $valor))
+      ->toBeGreaterThanOrEqual(1);
     expect($this->usuarioService->find($this->recebedorId)->getSaldo())
       ->toEqual($saldoAnteriorRecebedor + $valor);
   }
 );
+
 it(
-  'Transacao Lojista -> Usuario',
+  'Fail - Transacao Lojista -> Usuario',
   function () {
     $pagadorLojista = $this->usuarioService->add(
       [
