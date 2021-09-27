@@ -37,4 +37,9 @@ class TransacaoRepository extends SleekDB implements ITransacaoRepository
     )
     ['_id'];
   }
+
+  public function delete(int $idTransacao): bool
+  {
+    return $this->getConnection()->deleteById($idTransacao);
+  }
 }

@@ -6,6 +6,7 @@ use App\Repositories\Sleekdb\TransacaoRepository;
 use App\Repositories\Sleekdb\UsuarioRepository;
 use App\Services\TransacaoService;
 use App\Services\UsuarioService;
+use App\Utils\Errors\ServiceError;
 
 beforeEach(
   function () {
@@ -35,7 +36,7 @@ beforeEach(
   }
 );
 it(
-  'Criando Transacao e validando saldo do pagador e recebedor',
+  'Transacao Usuario -> Usuario',
   function () {
     $pagador = $this->usuarioService->find($this->pagadorId);
     $saldoAnteriorPagador = $pagador->getSaldo();
@@ -48,5 +49,25 @@ it(
       ->toEqual($saldoAnteriorPagador - $valor);
     expect($this->usuarioService->find($this->recebedorId)->getSaldo())
       ->toEqual($saldoAnteriorRecebedor + $valor);
+  }
+);
+it(
+  'Transacao Lojista -> Usuario',
+  function () {
+    $pagadorLojista = $this->usuarioService->add(
+      [
+        'nome' => $this->fake->name,
+        'documento' => $this->fake->cpf,
+        'email' => $this->fake->email,
+        'senha' => $this->fake->password,
+        'tipoUsuario' => TipoUsuarioEnum::Logista,
+        'saldo' => $this->fake->randomFloat(2, 100, 100),
+      ]
+    );
+    $pagador = $this->usuarioService->find($pagadorLojista);
+    $recebedor = $this->usuarioService->find($this->recebedorId);
+    $valor = 50.85;
+    expect($this->transacaoService->add($pagador, $recebedor, $valor))
+      ->toBeInstanceOf(ServiceError::class);
   }
 );

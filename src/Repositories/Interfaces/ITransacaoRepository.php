@@ -8,4 +8,6 @@ interface ITransacaoRepository
 {
   function add(Transacao $usuario): int;
 
+  public function delete(int $idTransacao): bool;
+
 }
