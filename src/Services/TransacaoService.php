@@ -66,7 +66,7 @@ class TransacaoService implements ITransacaoService
       return new ServiceError(['codigo' => ITransacaoService::NAO_AUTORIZADO, 'menssagem' => 'Transacao não Autorizada']
       );
     }
-    if (!$this->$this->usuarioService->validarSaldoPagador($pagador, $valor)) {
+    if (!$this->usuarioService->validarSaldoPagador($pagador, $valor)) {
       return new ServiceError(['codigo' => ITransacaoService::PAGADOR_SEM_SALDO, 'menssagem' => 'Pagador Sem Saldo']);
     }
     return true;

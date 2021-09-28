@@ -52,6 +52,6 @@ class UsuarioService implements IUsuarioService
 
   public function validarSaldoPagador(Usuario $pagador, float $valor): bool
   {
-    return $pagador->getSaldo() <= $valor;
+    return $pagador->getSaldo() >= $valor;
   }
 }
