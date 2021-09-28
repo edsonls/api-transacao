@@ -25,13 +25,8 @@ class TransacaoService implements ITransacaoService
   {
     $transacaoValida = $this->validaTransacao($pagador, $valor);
     if ($transacaoValida === true) {
-      $transacaoObj = new Transacao(
-
-        $pagador,
-        $recebedor,
-        $valor
-      );
-      $idTransacao = $this->repository->add($transacaoObj);
+      $transacaoEntity = new Transacao($pagador, $recebedor, $valor);
+      $idTransacao = $this->repository->add($transacaoEntity);
       if ($idTransacao) {
         if ($this->usuarioService->retiraSaldo($pagador, $valor)) {
           if ($this->usuarioService->adicionaSaldo($recebedor, $valor)) {
