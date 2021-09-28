@@ -7,6 +7,7 @@ use App\Entities\Transacao;
 use App\Entities\Usuario;
 use App\Repositories\Interfaces\ITransacaoRepository;
 use App\Services\Interfaces\IAutorizacaoService;
+use App\Services\Interfaces\INotificacaoService;
 use App\Services\Interfaces\ITransacaoService;
 use App\Services\Interfaces\IUsuarioService;
 use App\Utils\Errors\ServiceError;
@@ -18,6 +19,7 @@ class TransacaoService implements ITransacaoService
     private ITransacaoRepository $repository,
     private IUsuarioService $usuarioService,
     private IAutorizacaoService $autorizacaoService,
+    private INotificacaoService $notificaService
   ) {
   }
 
@@ -69,6 +71,6 @@ class TransacaoService implements ITransacaoService
 
   private function enviaNotificacao(Usuario $recebedor, float $valor): void
   {
-    //todo
+    $this->notificaService->transacaoRecebida($recebedor, $valor);
   }
 }
