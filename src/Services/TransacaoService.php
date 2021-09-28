@@ -23,33 +23,33 @@ class TransacaoService implements ITransacaoService
 
   public function add(Usuario $pagador, Usuario $recebedor, float $valor): int|ServiceError
   {
-    if ($pagador->getTipoUsuario() !== TipoUsuarioEnum::Comum) {
-      return new ServiceError(['codigo' => ITransacaoService::PAGADOR_INVALIDO, 'menssagem' => 'Pagador Invalido']);
-    }
-    if (!$this->autorizacaoService->autoriza()) {
-      return new ServiceError(['codigo' => ITransacaoService::NAO_AUTORIZADO, 'menssagem' => 'Transacao não Autorizada']
-      );
-    }
-    $transacaoObj = new Transacao(
-      $pagador,
-      $recebedor,
-      $valor
-    );
-    $idTransacao = $this->repository->add($transacaoObj);
-    if ($idTransacao) {
-      if ($this->usuarioService->retiraSaldo($pagador, $valor)) {
-        if ($this->usuarioService->adicionaSaldo($recebedor, $valor)) {
-          return $idTransacao;
-        }
-        $this->usuarioService->adicionaSaldo($pagador, $valor);
-        $this->delete($idTransacao);
-        return new ServiceError(['codigo' => ITransacaoService::PAGADOR_SEM_SALDO, 'menssagem' => 'Pagador Sem Saldo']);
-      }
-      $this->delete($idTransacao);
-      return new ServiceError(['codigo' => ITransacaoService::PAGADOR_SEM_SALDO, 'menssagem' => 'Pagador Sem Saldo']);
-    }
+    $transacaoValida = $this->validaTransacao($pagador, $valor);
+    if ($transacaoValida === true) {
+      $transacaoObj = new Transacao(
 
-    return new ServiceError(['codigo' => ITransacaoService::PAGADOR_SEM_SALDO, 'menssagem' => 'Pagador Sem Saldo']);
+        $pagador,
+        $recebedor,
+        $valor
+      );
+      $idTransacao = $this->repository->add($transacaoObj);
+      if ($idTransacao) {
+        if ($this->usuarioService->retiraSaldo($pagador, $valor)) {
+          if ($this->usuarioService->adicionaSaldo($recebedor, $valor)) {
+            $this->enviaNotificacao($recebedor, $valor);
+            return $idTransacao;
+          }
+          $this->usuarioService->estornarSaldo($pagador, $valor);
+          $this->delete($idTransacao);
+          return new ServiceError(
+            ['codigo' => ITransacaoService::TRANSACAO_INVALIDA, 'menssagem' => 'Erro ao ao tentar transacionar']
+          );
+        }
+        $this->delete($idTransacao);
+        return new ServiceError(['codigo' => ITransacaoService::TRANSACAO_INVALIDA, 'menssagem' => 'Pagador Sem Saldo']
+        );
+      }
+    }
+    return $transacaoValida;
   }
 
   private function delete(int $idTransacao): bool
@@ -57,4 +57,23 @@ class TransacaoService implements ITransacaoService
     return $this->repository->delete($idTransacao);
   }
 
+  private function validaTransacao(Usuario $pagador, float $valor): ServiceError|bool
+  {
+    if ($pagador->getTipoUsuario() !== TipoUsuarioEnum::Comum) {
+      return new ServiceError(['codigo' => ITransacaoService::PAGADOR_INVALIDO, 'menssagem' => 'Pagador Invalido']);
+    }
+    if (!$this->autorizacaoService->autoriza()) {
+      return new ServiceError(['codigo' => ITransacaoService::NAO_AUTORIZADO, 'menssagem' => 'Transacao não Autorizada']
+      );
+    }
+    if (!$this->$this->usuarioService->validarSaldoPagador($pagador, $valor)) {
+      return new ServiceError(['codigo' => ITransacaoService::PAGADOR_SEM_SALDO, 'menssagem' => 'Pagador Sem Saldo']);
+    }
+    return true;
+  }
+
+  private function enviaNotificacao(Usuario $recebedor, float $valor): void
+  {
+    //todo
+  }
 }

@@ -17,7 +17,7 @@ class AutorizacaoRepository extends Guzzle implements IAutorizacaoRepository
   {
     try {
       $response = $this->getClient()->get(self::URL);
-      $body = json_decode((string)$response->getBody(), false, 1, JSON_THROW_ON_ERROR);
+      $body = json_decode((string)$response->getBody(), false, 512, JSON_THROW_ON_ERROR);
       return $response->getStatusCode() === 200 && $body?->message === self::AUTORIZADO;
     } catch (GuzzleException | Exception $exception) {
       AppLog::error('AutorizacaoRepository', $exception->getMessage());

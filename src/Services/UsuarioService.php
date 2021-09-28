@@ -35,9 +35,6 @@ class UsuarioService implements IUsuarioService
 
   public function retiraSaldo(Usuario $pagador, float $valor): bool
   {
-    if ($pagador->getSaldo() <= $valor) {
-      return false;
-    }
     $pagador->atualizaSaldo($pagador->getSaldo() - $valor);
     return $this->repository->update($pagador);
   }
@@ -46,5 +43,15 @@ class UsuarioService implements IUsuarioService
   {
     $recebedor->atualizaSaldo($recebedor->getSaldo() + $valor);
     return $this->repository->update($recebedor);
+  }
+
+  public function estornarSaldo(Usuario $pagador, float $valor): bool
+  {
+    return $this->adicionaSaldo($pagador, $valor);
+  }
+
+  public function validarSaldoPagador(Usuario $pagador, float $valor): bool
+  {
+    return $pagador->getSaldo() <= $valor;
   }
 }
