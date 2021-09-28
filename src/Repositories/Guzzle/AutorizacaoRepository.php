@@ -4,6 +4,7 @@ namespace App\Repositories\Guzzle;
 
 use App\Providers\HttpClient\Guzzle;
 use App\Repositories\Interfaces\IAutorizacaoRepository;
+use App\Utils\Log\AppLog;
 use Exception;
 use GuzzleHttp\Exception\GuzzleException;
 
@@ -16,10 +17,10 @@ class AutorizacaoRepository extends Guzzle implements IAutorizacaoRepository
   {
     try {
       $response = $this->getClient()->get(self::URL);
-      $body = json_decode((string)$response->getBody(), false, 512, JSON_THROW_ON_ERROR);
+      $body = json_decode((string)$response->getBody(), false, 1, JSON_THROW_ON_ERROR);
       return $response->getStatusCode() === 200 && $body?->message === self::AUTORIZADO;
     } catch (GuzzleException | Exception $exception) {
-      //todo log
+      AppLog::error('AutorizacaoRepository', $exception->getMessage());
       return false;
     }
   }

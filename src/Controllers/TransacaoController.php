@@ -2,8 +2,10 @@
 
 namespace App\Controllers;
 
+use App\Repositories\Guzzle\AutorizacaoRepository;
 use App\Repositories\Sleekdb\TransacaoRepository;
 use App\Repositories\Sleekdb\UsuarioRepository;
+use App\Services\AutorizacaoService;
 use App\Services\Interfaces\ITransacaoService;
 use App\Services\Interfaces\IUsuarioService;
 use App\Services\TransacaoService;
@@ -22,7 +24,11 @@ class TransacaoController
   public function __construct()
   {
     $this->usuarioService = new UsuarioService(new UsuarioRepository());
-    $this->service = new TransacaoService(new TransacaoRepository(), $this->usuarioService);
+    $this->service = new TransacaoService(
+      new TransacaoRepository(),
+      $this->usuarioService,
+      new AutorizacaoService(new AutorizacaoRepository())
+    );
   }
 
   /**
