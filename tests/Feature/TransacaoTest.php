@@ -2,8 +2,10 @@
 
 
 use App\Entities\Enum\TipoUsuarioEnum;
+use App\Repositories\Guzzle\AutorizacaoRepository;
 use App\Repositories\Sleekdb\TransacaoRepository;
 use App\Repositories\Sleekdb\UsuarioRepository;
+use App\Services\AutorizacaoService;
 use App\Services\TransacaoService;
 use App\Services\UsuarioService;
 use App\Utils\Errors\ServiceError;
@@ -12,7 +14,11 @@ beforeEach(
   function () {
     $this->fake = Faker\Factory::create('pt_BR');
     $this->usuarioService = new UsuarioService(new UsuarioRepository());
-    $this->transacaoService = new TransacaoService(new TransacaoRepository(), $this->usuarioService);
+    $this->transacaoService = new TransacaoService(
+      new TransacaoRepository(),
+      $this->usuarioService,
+      new AutorizacaoService(new AutorizacaoRepository())
+    );
     $this->pagadorId = $this->usuarioService->add(
       [
         'nome' => $this->fake->name,

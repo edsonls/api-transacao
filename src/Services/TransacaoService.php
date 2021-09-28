@@ -6,6 +6,7 @@ use App\Entities\Enum\TipoUsuarioEnum;
 use App\Entities\Transacao;
 use App\Entities\Usuario;
 use App\Repositories\Interfaces\ITransacaoRepository;
+use App\Services\Interfaces\IAutorizacaoService;
 use App\Services\Interfaces\ITransacaoService;
 use App\Services\Interfaces\IUsuarioService;
 use App\Utils\Errors\ServiceError;
@@ -15,7 +16,8 @@ class TransacaoService implements ITransacaoService
 
   public function __construct(
     private ITransacaoRepository $repository,
-    private IUsuarioService $usuarioService
+    private IUsuarioService $usuarioService,
+    private IAutorizacaoService $autorizacaoService,
   ) {
   }
 
@@ -24,7 +26,10 @@ class TransacaoService implements ITransacaoService
     if ($pagador->getTipoUsuario() !== TipoUsuarioEnum::Comum) {
       return new ServiceError(['codigo' => ITransacaoService::PAGADOR_INVALIDO, 'menssagem' => 'Pagador Invalido']);
     }
-
+    if (!$this->autorizacaoService->autoriza()) {
+      return new ServiceError(['codigo' => ITransacaoService::NAO_AUTORIZADO, 'menssagem' => 'Transacao não Autorizada']
+      );
+    }
     $transacaoObj = new Transacao(
       $pagador,
       $recebedor,
