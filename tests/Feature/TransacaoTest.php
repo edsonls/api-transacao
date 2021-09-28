@@ -3,9 +3,11 @@
 
 use App\Entities\Enum\TipoUsuarioEnum;
 use App\Repositories\Guzzle\AutorizacaoRepository;
+use App\Repositories\Guzzle\NotificacaoRepository;
 use App\Repositories\Sleekdb\TransacaoRepository;
 use App\Repositories\Sleekdb\UsuarioRepository;
 use App\Services\AutorizacaoService;
+use App\Services\NotificacaoService;
 use App\Services\TransacaoService;
 use App\Services\UsuarioService;
 use App\Utils\Errors\ServiceError;
@@ -17,7 +19,8 @@ beforeEach(
     $this->transacaoService = new TransacaoService(
       new TransacaoRepository(),
       $this->usuarioService,
-      new AutorizacaoService(new AutorizacaoRepository())
+      new AutorizacaoService(new AutorizacaoRepository()),
+      new NotificacaoService(new NotificacaoRepository())
     );
     $this->pagadorId = $this->usuarioService->add(
       [
