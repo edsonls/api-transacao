@@ -10,7 +10,7 @@ use App\Services\AutorizacaoService;
 use App\Services\NotificacaoService;
 use App\Services\TransacaoService;
 use App\Services\UsuarioService;
-use App\Utils\Errors\ServiceError;
+use App\Utils\Errors\Interfaces\IError;
 
 beforeEach(
   function () {
@@ -146,7 +146,28 @@ it(
     $recebedor = $this->usuarioService->find($this->recebedorId);
     $valor = 50.85;
     expect($this->transacaoService->add($pagador, $recebedor, $valor))
-      ->toBeInstanceOf(ServiceError::class);
+      ->toBeInstanceOf(IError::class);
+  }
+);
+
+it(
+  'Fail - Transacao Lojista -> Lojista',
+  function () {
+    $pagadorLojista = $this->usuarioService->add(
+      [
+        'nome' => $this->fake->name,
+        'documento' => $this->fake->cpf,
+        'email' => $this->fake->email,
+        'senha' => $this->fake->password,
+        'tipoUsuario' => TipoUsuarioEnum::Logista,
+        'saldo' => $this->fake->randomFloat(2, 100, 100),
+      ]
+    );
+    $pagador = $this->usuarioService->find($pagadorLojista);
+    $recebedor = $this->usuarioService->find($this->recebedorId);
+    $valor = 50.85;
+    expect($this->transacaoService->add($pagador, $recebedor, $valor))
+      ->toBeInstanceOf(IError::class);
   }
 );
 
@@ -167,7 +188,7 @@ it(
     $recebedor = $this->usuarioService->find($this->recebedorId);
     $valor = 89;
     expect($this->transacaoService->add($pagador, $recebedor, $valor))
-      ->toBeInstanceOf(ServiceError::class);
+      ->toBeInstanceOf(IError::class);
   }
 );
 
@@ -188,7 +209,7 @@ it(
     $recebedor = $this->usuarioService->find($this->lojistaId);
     $valor = 89;
     expect($this->transacaoService->add($pagador, $recebedor, $valor))
-      ->toBeInstanceOf(ServiceError::class);
+      ->toBeInstanceOf(IError::class);
   }
 );
 
@@ -210,7 +231,7 @@ it(
     $recebedor = $this->usuarioService->find($this->lojistaId);
     $valor = 89;
     expect($this->transacaoService->add($pagador, $recebedor, $valor))
-      ->toBeInstanceOf(ServiceError::class);
+      ->toBeInstanceOf(IError::class);
     expect($this->usuarioService->find($pagadorId)->getSaldo())
       ->toEqual($saldoAnteriorPagador);
   }
@@ -234,7 +255,7 @@ it(
     $saldoAnteriorRecebedor = $recebedor->getSaldo();
     $valor = 89;
     expect($this->transacaoService->add($pagador, $recebedor, $valor))
-      ->toBeInstanceOf(ServiceError::class);
+      ->toBeInstanceOf(IError::class);
     expect($this->usuarioService->find($this->lojistaId)->getSaldo())
       ->toEqual($saldoAnteriorRecebedor);
   }
