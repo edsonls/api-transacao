@@ -15,7 +15,8 @@
     "rakibtg/sleekdb": "^2.12",
     "fakerphp/faker": "^1.16",
     "guzzlehttp/guzzle": "^7.0",
-    "monolog/monolog": "^2.3"
+    "monolog/monolog": "^2.3",
+    "rakit/validation": "^1.4"
   },
   "require-dev": {
     "roave/security-advisories": "dev-latest",

@@ -13,7 +13,7 @@ abstract class Guzzle
     if (empty($this->client)) {
       $this->client = new Client(
         [
-          'timeout' => 2.0,
+          'timeout' => 20,
         ]
       );
     }

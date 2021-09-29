@@ -6,8 +6,7 @@ use App\Providers\HttpClient\Guzzle;
 use App\Repositories\Interfaces\INotificacaoRepository;
 use App\Utils\Log\AppLog;
 use Exception;
-use GuzzleHttp\Exception\RequestException;
-use Psr\Http\Message\ResponseInterface;
+use GuzzleHttp\Exception\GuzzleException;
 
 class NotificacaoRepository extends Guzzle implements INotificacaoRepository
 {
@@ -16,17 +15,10 @@ class NotificacaoRepository extends Guzzle implements INotificacaoRepository
   public function send(): bool
   {
     try {
-      $promise = $this->getClient()->requestAsync('GET', self::URL);
-      $promise->then(
-        function (ResponseInterface $res) {
-          AppLog::info('NotificacaoRepository', 'Notificacao Enviada status: ' . $res->getStatusCode());
-        },
-        function (RequestException $e) {
-          AppLog::error('NotificacaoRepository', 'msg: ' . $e->getMessage());
-        }
-      );
+      $response = $this->getClient()->get(self::URL);
+      AppLog::info('NotificacaoRepository', 'Notificacao Enviada status: ' . $response->getStatusCode());
       return true;
-    } catch (Exception $exception) {
+    } catch (Exception | GuzzleException $exception) {
       AppLog::error('NotificacaoRepository', $exception->getMessage());
       return false;
     }
