@@ -37,8 +37,13 @@ $app->post(
     $resp = $response
       ->withHeader('Content-Type', 'application/json');
     $transacaoController = new TransacaoController();
-    $resp->getBody()->write(json_encode(['id' => $transacaoController->add($request->getBody())]));
-    return $resp->withStatus(201);
+    $resposta = $transacaoController->add($request->getBody());
+    if (is_int($resposta)) {
+      $resp->getBody()->write(json_encode(['id' => $resposta]));
+      return $resp->withStatus(201);
+    }
+    $resp->getBody()->write(json_encode($resposta->getPilhaErro()));
+    return $resp->withStatus($resposta->getCodigo());
   }
 );
 
