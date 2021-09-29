@@ -42,7 +42,7 @@ beforeEach(
         'saldo' => $this->fake->randomFloat(2, 100, 100),
       ]
     );
-    $this->lojistaId = $this->usuarioService->add(
+    $this->logistaId = $this->usuarioService->add(
       [
         'nome' => $this->fake->name,
         'documento' => $this->fake->cpf,
@@ -92,21 +92,21 @@ it(
   }
 );
 it(
-  'OK - Transacao Usuario -> Lojista',
+  'OK - Transacao Usuario -> Logista',
   function () {
     $pagador = $this->usuarioService->find($this->pagadorId);
-    $recebedor = $this->usuarioService->find($this->lojistaId);
+    $recebedor = $this->usuarioService->find($this->logistaId);
     $valor = 50.85;
     expect($this->transacaoService->add($pagador, $recebedor, $valor))
       ->toBeGreaterThanOrEqual(1);
   }
 );
 it(
-  'OK - Transacao Usuario -> Lojista Validando Saldo Pagador',
+  'OK - Transacao Usuario -> Logista Validando Saldo Pagador',
   function () {
     $pagador = $this->usuarioService->find($this->pagadorId);
     $saldoAnteriorPagador = $pagador->getSaldo();
-    $recebedor = $this->usuarioService->find($this->lojistaId);
+    $recebedor = $this->usuarioService->find($this->logistaId);
     $valor = 50.85;
     expect($this->transacaoService->add($pagador, $recebedor, $valor))
       ->toBeGreaterThanOrEqual(1);
@@ -116,23 +116,23 @@ it(
 );
 
 it(
-  'OK - Transacao Usuario -> Lojista Validando Saldo Recebedor',
+  'OK - Transacao Usuario -> Logista Validando Saldo Recebedor',
   function () {
     $pagador = $this->usuarioService->find($this->pagadorId);
-    $recebedor = $this->usuarioService->find($this->lojistaId);
+    $recebedor = $this->usuarioService->find($this->logistaId);
     $saldoAnteriorRecebedor = $pagador->getSaldo();
     $valor = 50.85;
     expect($this->transacaoService->add($pagador, $recebedor, $valor))
       ->toBeGreaterThanOrEqual(1);
-    expect($this->usuarioService->find($this->lojistaId)->getSaldo())
+    expect($this->usuarioService->find($this->logistaId)->getSaldo())
       ->toEqual($saldoAnteriorRecebedor + $valor);
   }
 );
 
 it(
-  'Fail - Transacao Lojista -> Usuario',
+  'Fail - Transacao Logista -> Usuario',
   function () {
-    $pagadorLojista = $this->usuarioService->add(
+    $pagadorlogista = $this->usuarioService->add(
       [
         'nome' => $this->fake->name,
         'documento' => $this->fake->cpf,
@@ -142,7 +142,7 @@ it(
         'saldo' => $this->fake->randomFloat(2, 100, 100),
       ]
     );
-    $pagador = $this->usuarioService->find($pagadorLojista);
+    $pagador = $this->usuarioService->find($pagadorlogista);
     $recebedor = $this->usuarioService->find($this->recebedorId);
     $valor = 50.85;
     expect($this->transacaoService->add($pagador, $recebedor, $valor))
@@ -151,9 +151,9 @@ it(
 );
 
 it(
-  'Fail - Transacao Lojista -> Lojista',
+  'Fail - Transacao Logista -> Logista',
   function () {
-    $pagadorLojista = $this->usuarioService->add(
+    $pagadorlogista = $this->usuarioService->add(
       [
         'nome' => $this->fake->name,
         'documento' => $this->fake->cpf,
@@ -163,7 +163,7 @@ it(
         'saldo' => $this->fake->randomFloat(2, 100, 100),
       ]
     );
-    $pagador = $this->usuarioService->find($pagadorLojista);
+    $pagador = $this->usuarioService->find($pagadorlogista);
     $recebedor = $this->usuarioService->find($this->recebedorId);
     $valor = 50.85;
     expect($this->transacaoService->add($pagador, $recebedor, $valor))
@@ -193,7 +193,7 @@ it(
 );
 
 it(
-  'Fail - Transacao Usuario -> Lojista Sem Saldo',
+  'Fail - Transacao Usuario -> Logista Sem Saldo',
   function () {
     $pagadorId = $this->usuarioService->add(
       [
@@ -206,7 +206,7 @@ it(
       ]
     );
     $pagador = $this->usuarioService->find($pagadorId);
-    $recebedor = $this->usuarioService->find($this->lojistaId);
+    $recebedor = $this->usuarioService->find($this->logistaId);
     $valor = 89;
     expect($this->transacaoService->add($pagador, $recebedor, $valor))
       ->toBeInstanceOf(IError::class);
@@ -214,7 +214,7 @@ it(
 );
 
 it(
-  'Fail - Transacao Usuario -> Lojista Sem Saldo Validando Saldo Pagador',
+  'Fail - Transacao Usuario -> Logista Sem Saldo Validando Saldo Pagador',
   function () {
     $pagadorId = $this->usuarioService->add(
       [
@@ -228,7 +228,7 @@ it(
     );
     $pagador = $this->usuarioService->find($pagadorId);
     $saldoAnteriorPagador = $pagador->getSaldo();
-    $recebedor = $this->usuarioService->find($this->lojistaId);
+    $recebedor = $this->usuarioService->find($this->logistaId);
     $valor = 89;
     expect($this->transacaoService->add($pagador, $recebedor, $valor))
       ->toBeInstanceOf(IError::class);
@@ -238,7 +238,7 @@ it(
 );
 
 it(
-  'Fail - Transacao Usuario -> Lojista Sem Saldo Validando Saldo Recebedor',
+  'Fail - Transacao Usuario -> Logista Sem Saldo Validando Saldo Recebedor',
   function () {
     $pagadorId = $this->usuarioService->add(
       [
@@ -251,12 +251,12 @@ it(
       ]
     );
     $pagador = $this->usuarioService->find($pagadorId);
-    $recebedor = $this->usuarioService->find($this->lojistaId);
+    $recebedor = $this->usuarioService->find($this->logistaId);
     $saldoAnteriorRecebedor = $recebedor->getSaldo();
     $valor = 89;
     expect($this->transacaoService->add($pagador, $recebedor, $valor))
       ->toBeInstanceOf(IError::class);
-    expect($this->usuarioService->find($this->lojistaId)->getSaldo())
+    expect($this->usuarioService->find($this->logistaId)->getSaldo())
       ->toEqual($saldoAnteriorRecebedor);
   }
 );

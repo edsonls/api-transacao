@@ -33,7 +33,7 @@ beforeEach(
         'saldo' => $this->fake->randomFloat(2, 100, 100),
       ]
     );
-    $this->lojistaId = $this->usuarioService->add(
+    $this->logistaId = $this->usuarioService->add(
       [
         'nome' => $this->fake->name,
         'documento' => $this->fake->cpf,
@@ -63,14 +63,14 @@ it(
   }
 );
 it(
-  'OK - Transacao Usuario -> Lojista',
+  'OK - Transacao Usuario -> Logista',
   function () {
     expect(
       $this->transacaoController->add(
         Utils::streamFor(
           json_encode([
                         'pagador' => $this->pagadorId,
-                        'recebedor' => $this->lojistaId,
+                        'recebedor' => $this->logistaId,
                         'valor' => 50.85,
                       ])
         )
@@ -81,13 +81,13 @@ it(
 );
 
 it(
-  'Fail - Transacao Lojista -> Usuario',
+  'Fail - Transacao Logista -> Usuario',
   function () {
     expect(
       $this->transacaoController->add(
         Utils::streamFor(
           json_encode([
-                        'pagador' => $this->lojistaId,
+                        'pagador' => $this->logistaId,
                         'recebedor' => $this->pagadorId,
                         'valor' => 50.85,
                       ])
@@ -98,14 +98,14 @@ it(
   }
 );
 it(
-  'Fail - Transacao Lojista -> Lojista',
+  'Fail - Transacao Logista -> Logista',
   function () {
     expect(
       $this->transacaoController->add(
         Utils::streamFor(
           json_encode([
-                        'pagador' => $this->lojistaId,
-                        'recebedor' => $this->lojistaId,
+                        'pagador' => $this->logistaId,
+                        'recebedor' => $this->logistaId,
                         'valor' => 50.85,
                       ])
         )
@@ -115,14 +115,14 @@ it(
   }
 );
 it(
-  'Fail - Transacao Usuario -> Lojista Valor negativo',
+  'Fail - Transacao Usuario -> Logista Valor negativo',
   function () {
     expect(
       $this->transacaoController->add(
         Utils::streamFor(
           json_encode([
                         'pagador' => $this->pagadorId,
-                        'recebedor' => $this->lojistaId,
+                        'recebedor' => $this->logistaId,
                         'valor' => -50.85,
                       ])
         )
@@ -132,14 +132,14 @@ it(
   }
 );
 it(
-  'Fail - Transacao Usuario invalido -> Lojista',
+  'Fail - Transacao Usuario invalido -> Logista',
   function () {
     expect(
       $this->transacaoController->add(
         Utils::streamFor(
           json_encode([
                         'pagador' => 'abc',
-                        'recebedor' => $this->lojistaId,
+                        'recebedor' => $this->logistaId,
                         'valor' => 50.85,
                       ])
         )
@@ -149,7 +149,7 @@ it(
   }
 );
 it(
-  'Fail - Transacao Usuario -> Lojista invalido',
+  'Fail - Transacao Usuario -> Logista invalido',
   function () {
     expect(
       $this->transacaoController->add(
@@ -166,7 +166,7 @@ it(
   }
 );
 it(
-  'Fail - Transacao Usuario invalido -> Lojista invalido',
+  'Fail - Transacao Usuario invalido -> Logista invalido',
   function () {
     expect(
       $this->transacaoController->add(
