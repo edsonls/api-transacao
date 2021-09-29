@@ -47,7 +47,13 @@ class TransacaoController
       return $validacao;
     }
     $pagador = $this->usuarioService->find($body['pagador']);
+    if ($pagador instanceof IError) {
+      return $pagador;
+    }
     $recebedor = $this->usuarioService->find($body['recebedor']);
+    if ($recebedor instanceof IError) {
+      return $recebedor;
+    }
     return $this->service->add($pagador, $recebedor, $body['valor']);
   }
 }
