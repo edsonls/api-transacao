@@ -19,7 +19,7 @@ it(
         Utils::streamFor(
           json_encode([
                         'nome' => $this->fake->name,
-                        'documento' => $this->fake->cpf,
+                        'documento' => $this->fake->cpf(false),
                         'email' => $this->fake->email,
                         'senha' => $this->fake->password,
                         'tipoUsuario' => TipoUsuarioEnum::Comum,
@@ -39,7 +39,7 @@ it(
         Utils::streamFor(
           json_encode([
                         'nome' => $this->fake->name,
-                        'documento' => $this->fake->cpf,
+                        'documento' => $this->fake->cpf(false),
                         'email' => $this->fake->email,
                         'senha' => $this->fake->password,
                         'tipoUsuario' => TipoUsuarioEnum::Logista,

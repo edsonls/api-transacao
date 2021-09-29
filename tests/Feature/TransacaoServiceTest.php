@@ -25,7 +25,7 @@ beforeEach(
     $this->pagadorId = $this->usuarioService->add(
       [
         'nome' => $this->fake->name,
-        'documento' => $this->fake->cpf,
+        'documento' => $this->fake->cpf(false),
         'email' => $this->fake->email,
         'senha' => $this->fake->password,
         'tipoUsuario' => TipoUsuarioEnum::Comum,
@@ -35,7 +35,7 @@ beforeEach(
     $this->recebedorId = $this->usuarioService->add(
       [
         'nome' => $this->fake->name,
-        'documento' => $this->fake->cpf,
+        'documento' => $this->fake->cpf(false),
         'email' => $this->fake->email,
         'senha' => $this->fake->password,
         'tipoUsuario' => TipoUsuarioEnum::Comum,
@@ -45,7 +45,7 @@ beforeEach(
     $this->logistaId = $this->usuarioService->add(
       [
         'nome' => $this->fake->name,
-        'documento' => $this->fake->cpf,
+        'documento' => $this->fake->cpf(false),
         'email' => $this->fake->email,
         'senha' => $this->fake->password,
         'tipoUsuario' => TipoUsuarioEnum::Logista,
@@ -135,7 +135,7 @@ it(
     $pagadorlogista = $this->usuarioService->add(
       [
         'nome' => $this->fake->name,
-        'documento' => $this->fake->cpf,
+        'documento' => $this->fake->cpf(false),
         'email' => $this->fake->email,
         'senha' => $this->fake->password,
         'tipoUsuario' => TipoUsuarioEnum::Logista,
@@ -156,7 +156,7 @@ it(
     $pagadorlogista = $this->usuarioService->add(
       [
         'nome' => $this->fake->name,
-        'documento' => $this->fake->cpf,
+        'documento' => $this->fake->cpf(false),
         'email' => $this->fake->email,
         'senha' => $this->fake->password,
         'tipoUsuario' => TipoUsuarioEnum::Logista,
@@ -177,7 +177,7 @@ it(
     $pagadorId = $this->usuarioService->add(
       [
         'nome' => $this->fake->name,
-        'documento' => $this->fake->cpf,
+        'documento' => $this->fake->cpf(false),
         'email' => $this->fake->email,
         'senha' => $this->fake->password,
         'tipoUsuario' => TipoUsuarioEnum::Comum,
@@ -198,7 +198,7 @@ it(
     $pagadorId = $this->usuarioService->add(
       [
         'nome' => $this->fake->name,
-        'documento' => $this->fake->cpf,
+        'documento' => $this->fake->cpf(false),
         'email' => $this->fake->email,
         'senha' => $this->fake->password,
         'tipoUsuario' => TipoUsuarioEnum::Comum,
@@ -219,7 +219,7 @@ it(
     $pagadorId = $this->usuarioService->add(
       [
         'nome' => $this->fake->name,
-        'documento' => $this->fake->cpf,
+        'documento' => $this->fake->cpf(false),
         'email' => $this->fake->email,
         'senha' => $this->fake->password,
         'tipoUsuario' => TipoUsuarioEnum::Comum,
@@ -243,7 +243,7 @@ it(
     $pagadorId = $this->usuarioService->add(
       [
         'nome' => $this->fake->name,
-        'documento' => $this->fake->cpf,
+        'documento' => $this->fake->cpf(false),
         'email' => $this->fake->email,
         'senha' => $this->fake->password,
         'tipoUsuario' => TipoUsuarioEnum::Comum,
