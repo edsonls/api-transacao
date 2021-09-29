@@ -9,7 +9,7 @@ abstract class RequestValidation
 {
   private const regras = [
     "transacao" => [
-      'valor' => 'required|integer',
+      'valor' => 'required|numeric',
       'pagador' => 'required|integer',
       'recebedor' => 'required|integer',
     ],
@@ -27,7 +27,7 @@ abstract class RequestValidation
   private const i18n = [
     "pt-br" => [
       'required' => 'Campo obrigatório.',
-      'integer' => 'Valor tem que ser do tipo inteiro.',
+      'integer' => 'Campo tem que ser do tipo inteiro.',
       'nome:min' => 'Campo nome tem que ter no minímo 5 caracteres',
       'documento:min' => 'Campo documento tem que ter 11 números.',
       'documento:max' => 'Campo documento tem que ter 11 números.',
@@ -46,8 +46,16 @@ abstract class RequestValidation
     $validation->setMessages(self::i18n["pt-br"]);
 
     $validation->validate();
-
-    return $validation->fails() ? new ControllerError($validation->errors()->firstOfAll()) : true;
+    $validaValor = $request['valor'] <= 0 ? ['valor' => 'Campo tem que ser maior que 0'] : [];
+    if ($validation->fails()) {
+      return new ControllerError(
+        array_merge($validation->errors()->firstOfAll(), $validaValor)
+      );
+    }
+    if (!empty($validaValor)) {
+      return new ControllerError($validaValor);
+    }
+    return true;
   }
 
   public static function validaUsuario(array $request): bool|ControllerError
