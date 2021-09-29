@@ -2,12 +2,22 @@
 
 namespace App\Utils\Errors;
 
-class ControllerError
-{
-  public $codigo = 422;
+use App\Utils\Errors\Interfaces\IError;
 
-  public function __construct(public array $pilhaErro = [])
+class ControllerError implements IError
+{
+
+  public function __construct(private array $pilhaErro = [])
   {
   }
 
+  public function getCodigo(): int
+  {
+    return 422;
+  }
+
+  public function getPilhaErro(): array
+  {
+    return $this->pilhaErro;
+  }
 }

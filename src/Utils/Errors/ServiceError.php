@@ -2,12 +2,22 @@
 
 namespace App\Utils\Errors;
 
-class ServiceError
-{
-  public $codigo = 400;
+use App\Utils\Errors\Interfaces\IError;
 
-  public function __construct(public array $pilhaErro = [])
+class ServiceError implements IError
+{
+
+  public function __construct(private array $pilhaErro = [])
   {
   }
 
+  public function getCodigo(): int
+  {
+    return 400;
+  }
+
+  public function getPilhaErro(): array
+  {
+    return $this->pilhaErro;
+  }
 }
