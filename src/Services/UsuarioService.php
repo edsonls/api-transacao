@@ -5,32 +5,45 @@ namespace App\Services;
 use App\Entities\Usuario;
 use App\Repositories\Interfaces\IUsuarioRepository;
 use App\Services\Interfaces\IUsuarioService;
+use App\Utils\Errors\ServiceError;
 
 class UsuarioService implements IUsuarioService
 {
-
 
   public function __construct(
     private IUsuarioRepository $repository
   ) {
   }
 
-  public function add(array $usuario): int
+  public function add(array $usuario): ServiceError|int
   {
-    $usuarioObj = new Usuario(
-      $usuario['nome'],
-      $usuario['documento'],
-      $usuario['email'],
-      $usuario['senha'],
-      $usuario['tipoUsuario'],
-      $usuario['saldo'],
+    if ($this->repository->exists($usuario['documento'], $usuario['email'])) {
+      return new ServiceError(
+        ['codigo' => IUsuarioService::USUARIO_JA_CADASTRADO, "mensagem" => "Usuário já está cadastrado no sistema!"]
+      );
+    }
+    return $this->repository->add(
+      new Usuario(
+        $usuario['nome'],
+        $usuario['documento'],
+        $usuario['email'],
+        $usuario['senha'],
+        $usuario['tipoUsuario'],
+        $usuario['saldo'],
+      )
     );
-    return $this->repository->add($usuarioObj);
   }
 
-  public function find(int $id): Usuario
+  public function find(int $id): ServiceError|Usuario
   {
-    return $this->repository->find($id);
+    return $this->repository->find($id) ?? new ServiceError(
+        ['codigo' => IUsuarioService::USUARIO_NAO_ENCONTRADO, "mensagem" => "Usuario não encontrado no sistema!"]
+      );
+  }
+
+  public function exists(string $documento, string $email): bool
+  {
+    return $this->repository->exists($documento, $email);
   }
 
   public function retiraSaldo(Usuario $pagador, float $valor): bool

@@ -46,9 +46,12 @@ class UsuarioRepository extends SleekDB implements IUsuarioRepository
    * @throws InvalidConfigurationException
    * @throws InvalidArgumentException
    */
-  public function find(int $id): Usuario
+  public function find(int $id): ?Usuario
   {
     $arrayUsuario = $this->getConnection()->findById($id);
+    if ($arrayUsuario === null) {
+      return null;
+    }
     return new Usuario(
                    $arrayUsuario['nome'],
                    $arrayUsuario['documento'],
@@ -73,5 +76,10 @@ class UsuarioRepository extends SleekDB implements IUsuarioRepository
           'tipoUsuario' => $usuario->getTipoUsuario(),
         ]
       ) !== false;
+  }
+
+  public function exists(string $documento, string $email): bool
+  {
+    return $this->getConnection()->findOneBy([["documento", "=", $documento], "OR", ["email", "=", $email]]) !== null;
   }
 }
