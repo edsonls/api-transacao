@@ -131,3 +131,54 @@ it(
       ->toBeInstanceOf(IError::class);
   }
 );
+it(
+  'Fail - Transacao Usuario invalido -> Lojista',
+  function () {
+    expect(
+      $this->transacaoController->add(
+        Utils::streamFor(
+          json_encode([
+                        'pagador' => 'abc',
+                        'recebedor' => $this->lojistaId,
+                        'valor' => 50.85,
+                      ])
+        )
+      )
+    )
+      ->toBeInstanceOf(IError::class);
+  }
+);
+it(
+  'Fail - Transacao Usuario -> Lojista invalido',
+  function () {
+    expect(
+      $this->transacaoController->add(
+        Utils::streamFor(
+          json_encode([
+                        'pagador' => $this->recebedorId,
+                        'recebedor' => 'asdasd',
+                        'valor' => 50.85,
+                      ])
+        )
+      )
+    )
+      ->toBeInstanceOf(IError::class);
+  }
+);
+it(
+  'Fail - Transacao Usuario invalido -> Lojista invalido',
+  function () {
+    expect(
+      $this->transacaoController->add(
+        Utils::streamFor(
+          json_encode([
+                        'pagador' => 'sadasdasdas',
+                        'recebedor' => 'asdasd',
+                        'valor' => 50.85,
+                      ])
+        )
+      )
+    )
+      ->toBeInstanceOf(IError::class);
+  }
+);
