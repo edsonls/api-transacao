@@ -3,7 +3,7 @@
 namespace App\Controllers;
 
 use App\Repositories\Guzzle\AutorizacaoRepository;
-use App\Repositories\Guzzle\NotificacaoRepository;
+use App\Repositories\Sleekdb\NotificacaoRepository;
 use App\Repositories\Sleekdb\TransacaoRepository;
 use App\Repositories\Sleekdb\UsuarioRepository;
 use App\Services\AutorizacaoService;

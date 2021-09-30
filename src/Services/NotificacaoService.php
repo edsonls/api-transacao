@@ -18,6 +18,6 @@ class NotificacaoService implements INotificacaoService
 
   public function transacaoRecebida(Usuario $recebedor, float $valor): bool
   {
-    return $this->repository->send();
+    return $this->repository->send($recebedor->getNome(), $recebedor->getEmail(), $valor);
   }
 }

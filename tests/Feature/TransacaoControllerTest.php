@@ -54,7 +54,7 @@ it(
           json_encode([
                         'pagador' => $this->pagadorId,
                         'recebedor' => $this->recebedorId,
-                        'valor' => 50.85,
+                        'valor' => $this->fake->randomFloat(2, 1, 8),
                       ])
         )
       )
@@ -71,7 +71,7 @@ it(
           json_encode([
                         'pagador' => $this->pagadorId,
                         'recebedor' => $this->logistaId,
-                        'valor' => 50.85,
+                        'valor' => $this->fake->randomFloat(2, 1, 8),
                       ])
         )
       )
@@ -89,7 +89,7 @@ it(
           json_encode([
                         'pagador' => $this->logistaId,
                         'recebedor' => $this->pagadorId,
-                        'valor' => 50.85,
+                        'valor' => $this->fake->randomFloat(2, 1, 8),
                       ])
         )
       )
@@ -106,7 +106,7 @@ it(
           json_encode([
                         'pagador' => $this->logistaId,
                         'recebedor' => $this->logistaId,
-                        'valor' => 50.85,
+                        'valor' => $this->fake->randomFloat(2, 1, 8),
                       ])
         )
       )
@@ -123,7 +123,7 @@ it(
           json_encode([
                         'pagador' => $this->pagadorId,
                         'recebedor' => $this->logistaId,
-                        'valor' => -50.85,
+                        'valor' => -$this->fake->randomFloat(2, 1, 8),
                       ])
         )
       )
@@ -140,7 +140,7 @@ it(
           json_encode([
                         'pagador' => 'abc',
                         'recebedor' => $this->logistaId,
-                        'valor' => 50.85,
+                        'valor' => $this->fake->randomFloat(2, 1, 8),
                       ])
         )
       )
@@ -157,7 +157,7 @@ it(
           json_encode([
                         'pagador' => $this->recebedorId,
                         'recebedor' => 'asdasd',
-                        'valor' => 50.85,
+                        'valor' => $this->fake->randomFloat(2, 1, 8),
                       ])
         )
       )
@@ -174,7 +174,7 @@ it(
           json_encode([
                         'pagador' => 'sadasdasdas',
                         'recebedor' => 'asdasd',
-                        'valor' => 50.85,
+                        'valor' => $this->fake->randomFloat(2, 1, 8),
                       ])
         )
       )

@@ -3,7 +3,7 @@
 
 use App\Entities\Enum\TipoUsuarioEnum;
 use App\Repositories\Guzzle\AutorizacaoRepository;
-use App\Repositories\Guzzle\NotificacaoRepository;
+use App\Repositories\Sleekdb\NotificacaoRepository;
 use App\Repositories\Sleekdb\TransacaoRepository;
 use App\Repositories\Sleekdb\UsuarioRepository;
 use App\Services\AutorizacaoService;
@@ -59,7 +59,7 @@ it(
   function () {
     $pagador = $this->usuarioService->find($this->pagadorId);
     $recebedor = $this->usuarioService->find($this->recebedorId);
-    $valor = 50.85;
+    $valor = $this->fake->randomFloat(2, 1, 8);
     expect($this->transacaoService->add($pagador, $recebedor, $valor))
       ->toBeGreaterThanOrEqual(1);
   }
@@ -70,7 +70,7 @@ it(
     $pagador = $this->usuarioService->find($this->pagadorId);
     $saldoAnteriorPagador = $pagador->getSaldo();
     $recebedor = $this->usuarioService->find($this->recebedorId);
-    $valor = 50.85;
+    $valor = $this->fake->randomFloat(2, 1, 8);
     expect($this->transacaoService->add($pagador, $recebedor, $valor))
       ->toBeGreaterThanOrEqual(1);
     expect($this->usuarioService->find($this->pagadorId)->getSaldo())
@@ -84,7 +84,7 @@ it(
     $pagador = $this->usuarioService->find($this->pagadorId);
     $recebedor = $this->usuarioService->find($this->recebedorId);
     $saldoAnteriorRecebedor = $pagador->getSaldo();
-    $valor = 50.85;
+    $valor = $this->fake->randomFloat(2, 1, 8);
     expect($this->transacaoService->add($pagador, $recebedor, $valor))
       ->toBeGreaterThanOrEqual(1);
     expect($this->usuarioService->find($this->recebedorId)->getSaldo())
@@ -96,7 +96,7 @@ it(
   function () {
     $pagador = $this->usuarioService->find($this->pagadorId);
     $recebedor = $this->usuarioService->find($this->logistaId);
-    $valor = 50.85;
+    $valor = $this->fake->randomFloat(2, 1, 8);
     expect($this->transacaoService->add($pagador, $recebedor, $valor))
       ->toBeGreaterThanOrEqual(1);
   }
@@ -107,7 +107,7 @@ it(
     $pagador = $this->usuarioService->find($this->pagadorId);
     $saldoAnteriorPagador = $pagador->getSaldo();
     $recebedor = $this->usuarioService->find($this->logistaId);
-    $valor = 50.85;
+    $valor = $this->fake->randomFloat(2, 1, 8);
     expect($this->transacaoService->add($pagador, $recebedor, $valor))
       ->toBeGreaterThanOrEqual(1);
     expect($this->usuarioService->find($this->pagadorId)->getSaldo())
@@ -121,7 +121,7 @@ it(
     $pagador = $this->usuarioService->find($this->pagadorId);
     $recebedor = $this->usuarioService->find($this->logistaId);
     $saldoAnteriorRecebedor = $pagador->getSaldo();
-    $valor = 50.85;
+    $valor = $this->fake->randomFloat(2, 1, 8);
     expect($this->transacaoService->add($pagador, $recebedor, $valor))
       ->toBeGreaterThanOrEqual(1);
     expect($this->usuarioService->find($this->logistaId)->getSaldo())
@@ -144,7 +144,7 @@ it(
     );
     $pagador = $this->usuarioService->find($pagadorlogista);
     $recebedor = $this->usuarioService->find($this->recebedorId);
-    $valor = 50.85;
+    $valor = $this->fake->randomFloat(2, 1, 8);
     expect($this->transacaoService->add($pagador, $recebedor, $valor))
       ->toBeInstanceOf(IError::class);
   }
@@ -165,7 +165,7 @@ it(
     );
     $pagador = $this->usuarioService->find($pagadorlogista);
     $recebedor = $this->usuarioService->find($this->recebedorId);
-    $valor = 50.85;
+    $valor = $this->fake->randomFloat(2, 1, 8);
     expect($this->transacaoService->add($pagador, $recebedor, $valor))
       ->toBeInstanceOf(IError::class);
   }
