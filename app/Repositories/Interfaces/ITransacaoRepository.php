@@ -6,7 +6,7 @@ use App\Entities\Transacao;
 
 interface ITransacaoRepository
 {
-  function add(Transacao $usuario): int;
+  function add(Transacao $usuario): ?int;
 
   public function delete(int $idTransacao): bool;
 
