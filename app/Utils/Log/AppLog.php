@@ -11,22 +11,23 @@ abstract class AppLog
 
   public static function warning(string $onde = 'service', string $message = ''): void
   {
-    $log = new Logger($onde);
-    $log->pushHandler(new StreamHandler(self::CAMINHO . $onde . '.log'));
-    $log->warning($message);
+    self::getLogger($onde)->warning($message);
   }
 
   public static function error(string $onde = 'service', string $message = ''): void
   {
-    $log = new Logger($onde);
-    $log->pushHandler(new StreamHandler(self::CAMINHO . $onde . '.log'));
-    $log->error($message);
+    self::getLogger($onde)->error($message);
   }
 
   public static function info(string $onde = 'service', string $message = ''): void
   {
+    self::getLogger($onde)->info($message);
+  }
+
+  private static function getLogger($onde)
+  {
     $log = new Logger($onde);
     $log->pushHandler(new StreamHandler(self::CAMINHO . $onde . '.log'));
-    $log->info($message);
+    return $log;
   }
 }
