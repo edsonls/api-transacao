@@ -26,32 +26,34 @@ class TransacaoService implements ITransacaoService
   public function add(Usuario $pagador, Usuario $recebedor, float $valor): int|ServiceError
   {
     $transacaoValida = $this->validaTransacao($pagador, $valor);
+
     if ($transacaoValida === true) {
       $transacaoEntity = new Transacao($pagador, $recebedor, $valor);
       $idTransacao = $this->repository->add($transacaoEntity);
-      if ($idTransacao) {
-        if ($this->usuarioService->retiraSaldo($pagador, $valor)) {
-          if ($this->usuarioService->adicionaSaldo($recebedor, $valor)) {
-            $this->enviaNotificacao($recebedor, $valor);
-            return $idTransacao;
-          }
-          $this->usuarioService->estornarSaldo($pagador, $valor);
-          $this->delete($idTransacao);
-          return new ServiceError(
-            ['codigo' => ITransacaoService::TRANSACAO_INVALIDA, 'menssagem' => 'Erro ao ao tentar transacionar']
-          );
+
+      if (
+        $idTransacao &&
+        $this->usuarioService->retiraSaldo($pagador, $valor)) {
+        if ($this->usuarioService->adicionaSaldo($recebedor, $valor)) {
+          $this->enviaNotificacao($recebedor, $valor);
+          return $idTransacao;
         }
+        $this->usuarioService->estornarSaldo($pagador, $valor);
         $this->delete($idTransacao);
-        return new ServiceError(['codigo' => ITransacaoService::TRANSACAO_INVALIDA, 'menssagem' => 'Pagador Sem Saldo']
+        return new ServiceError(
+          ['codigo' => ITransacaoService::TRANSACAO_INVALIDA, 'menssagem' => 'Erro ao ao tentar transacionar']
         );
       }
+      $this->delete($idTransacao);
+      return new ServiceError(['codigo' => ITransacaoService::TRANSACAO_INVALIDA, 'menssagem' => 'Pagador Sem Saldo']
+      );
     }
     return $transacaoValida;
   }
 
-  private function delete(int $idTransacao): bool
+  private function delete(?int $idTransacao): bool
   {
-    return $this->repository->delete($idTransacao);
+    return $idTransacao && $this->repository->delete($idTransacao);
   }
 
   private function validaTransacao(Usuario $pagador, float $valor): ServiceError|bool
