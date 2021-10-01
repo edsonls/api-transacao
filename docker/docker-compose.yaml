@@ -18,14 +18,13 @@ services:
     container_name: desafio-back
     ports:
       - "8012:80"
-      - "12443:443"
     volumes:
       - "../:/app"
     restart: always
     environment:
       PHP_DATE_TIMEZONE: America/Maceio
 
-  desafio-back_hmg:
+  desafio-back_hml:
     networks:
       - desafio-back
     working_dir: /app
