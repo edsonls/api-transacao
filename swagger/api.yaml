@@ -1,0 +1,201 @@
+swagger: "2.0"
+info:
+  description: "Api que simula uma transação entre usuario e lojistas"
+  version: "1.0.0"
+  title: "Api de transação"
+  contact:
+    email: "edsonlsjj@gmail.com"
+  license:
+    name: "Apache 2.0"
+    url: "http://www.apache.org/licenses/LICENSE-2.0.html"
+host: "localhost:8012"
+basePath: "/v1"
+tags:
+  - name: "usuarios"
+  - name: "transacoes"
+schemes:
+  - "http"
+paths:
+  /usuarios:
+    post:
+      tags:
+        - "usuarios"
+      summary: "Adiciona Novo usuario no sistema"
+      description: ""
+      consumes:
+        - "application/json"
+      produces:
+        - "application/json"
+      parameters:
+        - in: "body"
+          name: "body"
+          description: "Objeto do Usuario"
+          required: true
+          schema:
+            $ref: "#/definitions/Usuario"
+      responses:
+        "201":
+          description: Usuário criado com sucesso.
+          schema:
+            $ref: "#/definitions/PostSucesso"
+        "400":
+          description: Usuário já cadastrado.
+          schema:
+            $ref: "#/definitions/PostErrorUsuarioCadastrado"
+        "422":
+          description: Usuário com body inválido.
+          schema:
+            $ref: "#/definitions/PostErrorUsuarioBody"
+  /transacoes:
+    post:
+      tags:
+        - "transacoes"
+      summary: "Adiciona transação a um usuario existente"
+      description: ""
+      consumes:
+        - "application/json"
+      produces:
+        - "application/json"
+      parameters:
+        - in: "body"
+          name: "body"
+          description: "Objeto da transção"
+          required: true
+          schema:
+            $ref: "#/definitions/Transacao"
+      responses:
+        "201":
+          description: Transação efetuada com sucesso.
+          schema:
+            $ref: "#/definitions/PostSucesso"
+        "400":
+          description: Erro na transação.
+          schema:
+            $ref: "#/definitions/PostErrorTransacao"
+        "422":
+          description: Transação com body invalido.
+          schema:
+            $ref: "#/definitions/PostErrorTransacaoBody"
+definitions:
+  Usuario:
+    type: "object"
+    properties:
+      nome:
+        type: "string"
+      documento:
+        type: "string"
+      email:
+        type: "string"
+        format: "email"
+      senha:
+        type: "string"
+        format: "password"
+
+      tipoUsuario:
+        type: integer
+        enum:
+          - 1
+          - 2
+        description: "1 - Comum, 2 - Lojista"
+      saldo:
+        type: "number"
+        format: "currency"
+        example: 5.80
+  Transacao:
+    type: "object"
+    properties:
+      valor:
+        type: "number"
+        format: "currency"
+        example: 5.80
+      pagador:
+        type: integer
+      recebedor:
+        type: integer
+
+  PostSucesso:
+    type: object
+    properties:
+      id:
+        type: integer
+  PostErrorUsuarioCadastrado:
+    type: object
+    properties:
+      codigo:
+        type: integer
+        example: 2
+        enum:
+          - 1
+          - 2
+          - 3
+          - 4
+          - 5
+          - 6
+        description: "1 - Usuário não encontrado, 2 - Usuário já cadastrado, 3 - Pagador sem saldo, 4 - Pagador Invalido, 5 - Nao Autorizado, 6 - Transacao Invalida"
+      mensagem:
+        type: string
+        example: "Usuário já está cadastrado no sistema!"
+  PostErrorTransacao:
+    type: object
+    properties:
+      codigo:
+        type: integer
+        example: 1
+        enum:
+          - 1
+          - 2
+          - 3
+          - 4
+          - 5
+          - 6
+        description: "1 - Usuário não encontrado, 2 - Usuário já cadastrado, 3 - Pagador sem saldo, 4 - Pagador Invalido, 5 - Nao Autorizado, 6 - Transacao Invalida"
+      mensagem:
+        type: string
+        example: "Usuário não encontrado no sistema!"
+  PostErrorUsuarioBody:
+    type: object
+    properties:
+      nome:
+        type: string
+        example: "Campo documento tem que ter 11 números."
+      documento:
+        type: string
+        example: "Campo documento tem que ter 11 números."
+      email:
+        type: string
+        example: "Campo documento tem que ter 11 números."
+      senha:
+        type: string
+        example: "Campo documento tem que ter 11 números."
+      tipoUsuario:
+        type: string
+        example: "Campo documento tem que ter 11 números."
+      saldo:
+        type: string
+        example: "Campo documento tem que ter 11 números."
+  PostErrorTransacaoBody:
+    type: object
+    properties:
+      valor:
+        type: string
+        example: "Campo tem que ser do tipo númerico"
+      pagador:
+        type: string
+        example: "Campo obrigatório"
+      recebedor:
+        type: string
+        example: "Campo obrigatório"
+
+  ApiResponse:
+    type: "object"
+    properties:
+      code:
+        type: "integer"
+        format: "int32"
+      type:
+        type: "string"
+      message:
+        type: "string"
+externalDocs:
+  description: "Find out more about Swagger"
+  url: "http://swagger.io"

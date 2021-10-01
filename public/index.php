@@ -14,6 +14,7 @@ use Monolog\Logger;
 use Psr\Http\Message\ResponseInterface as Response;
 use Psr\Http\Message\ServerRequestInterface as Request;
 use Slim\Factory\AppFactory;
+use Slim\Routing\RouteCollectorProxy;
 
 $app = AppFactory::create();
 
@@ -26,37 +27,39 @@ $logger->pushHandler($streamHandler);
 // Add Error Middleware with Logger
 $errorMiddleware = $app->addErrorMiddleware(false, true, true, $logger);
 
-
-$app->post(
-  '/usuarios',
-  function (Request $request, Response $response) {
-    $resp = $response
-      ->withHeader('Content-Type', 'application/json');
-    $usuarioController = new UsuarioController();
-    $resposta = $usuarioController->add($request->getBody());
-    if (is_int($resposta)) {
-      $resp->getBody()->write(json_encode(['id' => $resposta]));
-      return $resp->withStatus(201);
+$app->group('/v1', function (RouteCollectorProxy $group) {
+  $group->post(
+    '/usuarios',
+    function (Request $request, Response $response) {
+      $resp = $response
+        ->withHeader('Content-Type', 'application/json');
+      $usuarioController = new UsuarioController();
+      $resposta = $usuarioController->add($request->getBody());
+      if (is_int($resposta)) {
+        $resp->getBody()->write(json_encode(['id' => $resposta]));
+        return $resp->withStatus(201);
+      }
+      $resp->getBody()->write(json_encode($resposta->getPilhaErro()));
+      return $resp->withStatus($resposta->getCodigo());
     }
-    $resp->getBody()->write(json_encode($resposta->getPilhaErro()));
-    return $resp->withStatus($resposta->getCodigo());
-  }
-);
+  );
 
-$app->post(
-  '/transacoes',
-  function (Request $request, Response $response) {
-    $resp = $response
-      ->withHeader('Content-Type', 'application/json');
-    $transacaoController = new TransacaoController();
-    $resposta = $transacaoController->add($request->getBody());
-    if (is_int($resposta)) {
-      $resp->getBody()->write(json_encode(['id' => $resposta]));
-      return $resp->withStatus(201);
+  $group->post(
+    '/transacoes',
+    function (Request $request, Response $response) {
+      $resp = $response
+        ->withHeader('Content-Type', 'application/json');
+      $transacaoController = new TransacaoController();
+      $resposta = $transacaoController->add($request->getBody());
+      if (is_int($resposta)) {
+        $resp->getBody()->write(json_encode(['id' => $resposta]));
+        return $resp->withStatus(201);
+      }
+      $resp->getBody()->write(json_encode($resposta->getPilhaErro()));
+      return $resp->withStatus($resposta->getCodigo());
     }
-    $resp->getBody()->write(json_encode($resposta->getPilhaErro()));
-    return $resp->withStatus($resposta->getCodigo());
-  }
-);
+  );
+});
+
 
 $app->run();
