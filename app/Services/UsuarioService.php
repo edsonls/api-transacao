@@ -4,6 +4,7 @@ namespace App\Services;
 
 use App\Entities\Usuario;
 use App\Repositories\Interfaces\IUsuarioRepository;
+use App\Services\Enum\ErrorServiceEnum;
 use App\Services\Interfaces\IUsuarioService;
 use App\Utils\Errors\ServiceError;
 
@@ -19,7 +20,7 @@ class UsuarioService implements IUsuarioService
   {
     if ($this->repository->exists($usuario['documento'], $usuario['email'])) {
       return new ServiceError(
-        ['codigo' => IUsuarioService::USUARIO_JA_CADASTRADO, "mensagem" => "Usuário já está cadastrado no sistema!"]
+        ['codigo' => ErrorServiceEnum::UsuarioJaCadastrado, "mensagem" => "Usuário já está cadastrado no sistema!"]
       );
     }
     return $this->repository->add(
@@ -37,7 +38,7 @@ class UsuarioService implements IUsuarioService
   public function find(int $id): ServiceError|Usuario
   {
     return $this->repository->find($id) ?? new ServiceError(
-        ['codigo' => IUsuarioService::USUARIO_NAO_ENCONTRADO, "mensagem" => "Usuario não encontrado no sistema!"]
+        ['codigo' => ErrorServiceEnum::UsuarioNaoEncontrado, "mensagem" => "Usuario não encontrado no sistema!"]
       );
   }
 

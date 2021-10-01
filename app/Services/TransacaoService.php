@@ -6,6 +6,7 @@ use App\Entities\Enum\TipoUsuarioEnum;
 use App\Entities\Transacao;
 use App\Entities\Usuario;
 use App\Repositories\Interfaces\ITransacaoRepository;
+use App\Services\Enum\ErrorServiceEnum;
 use App\Services\Interfaces\IAutorizacaoService;
 use App\Services\Interfaces\INotificacaoService;
 use App\Services\Interfaces\ITransacaoService;
@@ -41,11 +42,11 @@ class TransacaoService implements ITransacaoService
         $this->usuarioService->estornarSaldo($pagador, $valor);
         $this->delete($idTransacao);
         return new ServiceError(
-          ['codigo' => ITransacaoService::TRANSACAO_INVALIDA, 'menssagem' => 'Erro ao ao tentar transacionar']
+          ['codigo' => ErrorServiceEnum::TransacaoInvalida, 'mensagem' => 'Erro ao ao tentar transacionar']
         );
       }
       $this->delete($idTransacao);
-      return new ServiceError(['codigo' => ITransacaoService::TRANSACAO_INVALIDA, 'menssagem' => 'Pagador Sem Saldo']
+      return new ServiceError(['codigo' => ErrorServiceEnum::TransacaoInvalida, 'mensagem' => 'Pagador Sem Saldo']
       );
     }
     return $transacaoValida;
@@ -59,14 +60,14 @@ class TransacaoService implements ITransacaoService
   private function validaTransacao(Usuario $pagador, float $valor): ServiceError|bool
   {
     if ($pagador->getTipoUsuario() !== TipoUsuarioEnum::Comum) {
-      return new ServiceError(['codigo' => ITransacaoService::PAGADOR_INVALIDO, 'menssagem' => 'Pagador Invalido']);
+      return new ServiceError(['codigo' => ErrorServiceEnum::PagadorInvalido, 'mensagem' => 'Pagador Invalido']);
     }
     if (!$this->autorizacaoService->autoriza()) {
-      return new ServiceError(['codigo' => ITransacaoService::NAO_AUTORIZADO, 'menssagem' => 'Transacao não Autorizada']
+      return new ServiceError(['codigo' => ErrorServiceEnum::NaoAutorizado, 'mensagem' => 'Transacao não Autorizada']
       );
     }
     if (!$this->usuarioService->validarSaldoPagador($pagador, $valor)) {
-      return new ServiceError(['codigo' => ITransacaoService::PAGADOR_SEM_SALDO, 'menssagem' => 'Pagador Sem Saldo']);
+      return new ServiceError(['codigo' => ErrorServiceEnum::PagadorSemSaldo, 'mensagem' => 'Pagador Sem Saldo']);
     }
     return true;
   }

@@ -8,8 +8,6 @@ use App\Utils\Errors\ServiceError;
 
 interface IUsuarioService
 {
-  public const USUARIO_NAO_ENCONTRADO = 1;
-  public const USUARIO_JA_CADASTRADO = 2;
 
   public function add(array $usuario): ServiceError|int;
 
