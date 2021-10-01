@@ -9,14 +9,26 @@ error_reporting(E_ALL);
 
 use App\Controllers\TransacaoController;
 use App\Controllers\UsuarioController;
+use Monolog\Handler\StreamHandler;
+use Monolog\Logger;
 use Psr\Http\Message\ResponseInterface as Response;
 use Psr\Http\Message\ServerRequestInterface as Request;
 use Slim\Factory\AppFactory;
 
 $app = AppFactory::create();
-//Usuario
+
+$app->addRoutingMiddleware();
+
+// Monolog Example
+$logger = new Logger('app');
+$streamHandler = new StreamHandler(__DIR__ . '/logs/rest.log', 100);
+$logger->pushHandler($streamHandler);
+// Add Error Middleware with Logger
+$errorMiddleware = $app->addErrorMiddleware(false, true, true, $logger);
+
+
 $app->post(
-  '/usuario',
+  '/usuarios',
   function (Request $request, Response $response) {
     $resp = $response
       ->withHeader('Content-Type', 'application/json');
@@ -30,9 +42,9 @@ $app->post(
     return $resp->withStatus($resposta->getCodigo());
   }
 );
-//transacao
+
 $app->post(
-  '/transacao',
+  '/transacoes',
   function (Request $request, Response $response) {
     $resp = $response
       ->withHeader('Content-Type', 'application/json');
@@ -46,6 +58,5 @@ $app->post(
     return $resp->withStatus($resposta->getCodigo());
   }
 );
-
 
 $app->run();
