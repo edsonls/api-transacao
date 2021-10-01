@@ -1,0 +1,45 @@
+version: '3.8'
+services:
+  cron:
+    container_name: cron
+    networks:
+      - desafio-back
+    working_dir: /app/cron
+    image: php:8.0
+    volumes:
+      - "../:/app"
+    entrypoint: 'php processarFila.php'
+
+  desafio-back_dev:
+    networks:
+      - desafio-back
+    working_dir: /app
+    image: webdevops/php-apache-dev:8.0
+    container_name: desafio-back
+    ports:
+      - "8012:80"
+      - "12443:443"
+    volumes:
+      - "../:/app"
+    restart: always
+    environment:
+      PHP_DATE_TIMEZONE: America/Maceio
+
+  desafio-back_hmg:
+    networks:
+      - desafio-back
+    working_dir: /app
+    image: webdevops/php-apache:8.0
+    container_name: desafio-back
+    ports:
+      - "8012:80"
+      - "12443:443"
+    volumes:
+      - "../:/app"
+    restart: always
+    environment:
+      PHP_DATE_TIMEZONE: America/Maceio
+
+networks:
+  desafio-back:
+    name: "desafio-back"
