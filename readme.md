@@ -20,7 +20,7 @@ Tolera falha de:
 
 - Dev ```make deploy_dev``` a api vai estar rodando na porta 8012 http
 - HML ```make deploy_hml``` a api vai estar rodando na porta 8012 http e 12443 para https
-- Testes ```make run_test```
+- Testes ```make test```
 - Descer ambiente ```make down```
 
 Api consiste em dois endoints POST a serem consumidos de acordo com a documentação
